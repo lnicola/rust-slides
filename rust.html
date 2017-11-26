@@ -1,0 +1,875 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>rust</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <style>
+        .emoji {
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'NotoColorEmoji', 'Segoe UI Symbol', 'Android Emoji', 'EmojiSymbols' !important;
+        }
+        .right {
+            text-align: right !important;
+        }
+    </style>
+
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>Rust</h1>
+            </section>
+            <section>
+                <blockquote cite="https://www.rust-lang.org/en-US/">
+                    &ldquo;Rust is a systems programming language that runs blazingly fast, prevents segfaults, and guarantees thread safety.&rdquo;
+                </blockquote>
+            </section>
+            <section>
+                <ul>
+                    <li>Proiect personal al lui Graydon Hoare (2006)</li>
+                    <li class="fragment">Adoptat de Mozilla în 2009</li>
+                    <li class="fragment">Anunțat oficial în 2010</li>
+                    <li class="fragment">
+                        <em>Self-hosted</em> din 2011</li>
+                </ul>
+            </section>
+            <section>
+                <ul>
+                    <li>Schimbări drastice în primii ani</li>
+                    <li class="fragment">
+                        <em>Garbage-collected</em> până în 2013
+                    </li>
+                    <li class="fragment">Versiunea 1.0 (stabilă) a apărut în mai 2015</li>
+                    <li class="fragment">Versiunile ulterioare sunt compatibile cu codul vechi</li>
+                    <li class="fragment">Azi: Rust 1.21 (octombrie 2017)</li>
+                    <li class="fragment">O versiune nouă la fiecare 6 săptămâni (!)</li>
+                    <li class="fragment">RFCs</li>
+                </ul>
+            </section>
+            <section>
+                <ul>
+                    <li>Compilatorul disponibil pe
+                        <a href="https://www.rust-lang.org" rel="noopener noreferrer" target="_blank">www.rust-lang.org</a>
+                    </li>
+                    <li class="fragment"><a href="https://play.rust-lang.org/" rel="noopener noreferrer" target="_blank">play.rust-lang.org</a></li>
+                    <li class="fragment">Se integrează cu
+                        <a href="https://code.visualstudio.com/" rel="noopener noreferrer" target="_blank">Visual Studio Code</a>,
+                        <a href="http://www.vim.org/" rel="noopener noreferrer" target="_blank">vim</a>,
+                        <a href="https://intellij-rust.github.io/" rel="noopener noreferrer" target="_blank">IntelliJ</a>
+                        <em>&amp;c.</em>
+                    </li>
+                    <li class="fragment"><code>gdb</code>, Visual Studio</li>
+                    <li class="fragment">
+                        <a href="https://forge.rust-lang.org/platform-support.html" rel="noopener noreferrer" target="_blank">Platforme suportate</a>
+                        <ul>
+                            <li>Windows, Linux, Darwin</li>
+                            <li>x86, x64<span class="fragment">, ARM</span><span class="fragment">, MIPS</span><span class="fragment">, SPARC</span></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>rustup</h2>
+                <ul>
+                    <li>Folosit pentru instalarea de
+                        <em>toolchain</em>-uri</li>
+                    <li class="fragment">
+                        <code>rustup toolchain install stable-msvc</code>
+                    </li>
+                    <li class="fragment">
+                        <code>rustup toolchain install stable-apple-darwin</code>
+                    </li>
+                    <li class="fragment">
+                        <code>rustup component add rust-src rust-analysis rls</code>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <pre><code class="hljs lang-shell" data-trim>
+                    $ cargo new --bin hello
+                     Created binary (application) `hello` project
+                </code></pre>
+                <pre class="fragment"><code class="hljs lang-shell" data-trim>
+                    $ cd hello
+                    $ cargo run
+                   Compiling hello v0.1.0 (file:///home/grayshade/hello)
+                    Finished dev [unoptimized + debuginfo] target(s) in 0.34 secs
+                     Running `target/debug/hello`
+                    Hello, world!
+                </code></pre>
+            </section>
+            <section>
+                <pre><code class="hljs lang-shell" data-trim>
+                    $ tree
+                    .
+                    ├── Cargo.toml
+                    └── src
+                        └── main.rs
+                </code></pre>
+                <pre class="fragment"><code class="hljs" data-trim>
+                    [package]
+                    name = "hello"
+                    version = "0.1.0"
+                    authors = ["Laurentiu Nicola &lt;lnicola@dend.ro&gt;"]
+
+                    [dependencies]
+                </code></pre>
+                <pre class="fragment"><code class="hljs lang-rust" data-trim>
+                    fn main() {
+                        println!("Hello, world!");
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <h2>Cargo</h2>
+                <ul>
+                    <li>Interfața cu compilatorul și celelalte aplicații</li>
+                    <li class="fragment">
+                        <code>cargo build</code>
+                    </li>
+                    <li class="fragment">
+                        <code>cargo run</code>
+                    </li>
+                    <li class="fragment">
+                        <code>cargo clean</code>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>rustfmt</h2>
+                <ol>
+                    <li>
+                        <code>cargo install rustfmt</code>
+                    </li>
+                    <li>
+                        <code>cargo fmt</code>
+                    </li>
+                </ol>
+            </section>
+            <section>
+                <h2>Crates</h2>
+                <pre><code class="hljs" data-trim>
+                    [dependencies]
+                    cairo-rs = "0.2"
+                    glib = "0.3"
+                    num = "0.1"
+                    rayon = "0.8.2"
+                </code></pre>
+                <pre><code class="hljs lang-rust" data-trim>
+                    extern crate cairo;
+                    extern crate glib;
+                    extern crate num;
+                    extern crate rayon;
+                </code></pre>
+            </section>
+            <section>
+                <p><a href="https://crates.io" rel="noopener noreferrer" target="_blank">crates.io</a></p>
+                <p class="fragment"><a href="https://github.com/rust-unofficial/awesome-rust" rel="noopener noreferrer" target="_blank">Awesome Rust</a></p>
+            </section>
+            <section>
+                <pre><code class="hljs lang-rust" data-trim>
+                    fn main() {
+                        let name = "Matilda";
+                        let age = 2;
+                        println!("Miau! Sunt {} și am {} ani.", name, age);
+                    }
+                </code></pre>
+                <ul>
+                    <li class="fragment">Sintaxă în mare parte inspirată din C și Ruby</li>
+                    <li class="fragment">
+                        <code>println!</code> verificat la compilare!</li>
+                </ul>
+            </section>
+            <section>
+                <pre><code class="hljs lang-rust" data-trim>
+                    let mut balance = 100;
+                    balance += 10;
+                    println!("The account balance is {}", balance);
+                </code></pre>
+                <p class="fragment">Variabilele (<em>bindings</em>!) sunt în general imutabile</p>
+            </section>
+            <section>
+                <h2>Expresivitate, restricții</h2>
+                <ul>
+                    <li>🎗️Unele limbaje nu pot exprima anumite idei🎗️</li>
+                    <li class="fragment">🎗️Există idei pe care vrem să nu le putem exprima🎗️</li>
+                </ul>
+                <pre class="fragment"><code class="hljs lang-java" data-trim>
+                    ArrayList&lt;Integer&gt; xoxo = new ArrayList&lt;&gt;();
+                    xoxo.add(42);
+                    xoxo.remove("why‽");
+                </code></pre>
+            </section>
+            <section>
+                <h2>Sisteme de tipuri</h2>
+                <ul>
+                    <li><em>static vs. dynamic, strong vs. weak</em></li>
+                    <li class="fragment">Clase de valori: numere întregi, șiruri de caractere, numere pare</li>
+                    <li class="fragment">Definesc operațiile care pot fi aplicate valorilor</li>
+                    <li class="fragment">🎗️Scopul unui sistem de tipuri este să respingă programe greșite🎗️</li>
+                </ul>
+            </section>
+            <section>
+                <ul>
+                    <li>
+                        <code>i8</code>,
+                        <code>u8</code>,
+                        <code>i16</code>,
+                        <code>u16</code>,
+                        <code>i32</code>,
+                        <code>u32</code>,
+                        <code>usize</code>
+                    </li>
+                    <li class="fragment">
+                        <code>f32</code>,
+                        <code>f64</code>
+                    </li>
+                    <li class="fragment">
+                        <code>bool</code>
+                    </li>
+                    <li class="fragment">
+                        <code>char</code>
+                    </li>
+                    <li class="fragment">
+                        <code>String</code>,
+                        <code>&amp;str</code>
+                    </li>
+                    <li class="fragment">
+                        <code>enum</code>,
+                        <code>struct</code>
+                        <em>&amp;c.</em>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>Deducția tipurilor</h2>
+                <ul>
+                    <li>Toate valorile au tipuri cunoscute la compilare</li>
+                    <li class="fragment">În general tipurile pot fi deduse</li>
+                    <li class="fragment">Adnotări
+                        <pre><code class="hljs lang-rust">let age: u8 = 2;</code></pre>
+                    </li>
+                    <li class="fragment">Tipurile sunt deduse doar pentru variabilele locale</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Funcții</h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    fn double(n: i32) -&gt; i32 {
+                        n * 2
+                    }
+
+                    fn main() {
+                        println!("The answer is {}", double(21));
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <h2>Structuri de control</h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    let mut odds = 0;
+                    let mut evens = 0;
+
+                    for i in 0..100 {
+                        if i % 2 == 0 {
+                            evens += 1;
+                        } else {
+                            odds += 1;
+                        }
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    <em>Array</em>-uri, vectori,
+                    <em>slices</em>
+                </h2>
+                <p>
+                    <a href="https://play.rust-lang.org/?gist=a18b786049db38573595563e0a0817c4" rel="noopener noreferrer" target="_blank">Play</a>
+                </p>
+                <pre><code class="hljs lang-rust" data-trim>
+                    let mut numbers = [10, 19, 30];
+                    numbers[2] = 20;
+
+                    let mut colours = vec!["red", "green", "blue"];
+                    colours.push("fuchsia");
+
+                    println!("Some colours I know are: {:?}", colours);
+                    println!("But today I prefer: {:?}", &colours[0..2]);
+                </code></pre>
+                <ul>
+                    <li class="fragment">
+                        <em>Array</em>-urile își cunosc lungimea</li>
+                    <li class="fragment">
+                        <em>Slice</em>-urile memorează o referință către valori și lungimea, dar nu pot accesa restul valorilor</li>
+                    <li class="fragment">Validitatea indicilor este verificată la execuție</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Iteratori,
+                    <em>closures</em>
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    (0..100)
+                      .map(|i| i * 3)
+                      .filter(|i| i % 2 == 1)
+                      .sum();
+                </code></pre>
+                <ul>
+                    <li class="fragment">Valorile nu există simultan în memorie</li>
+                    <li class="fragment">Vezi
+                        <code>IEnumerable</code> (C#),
+                        <code>Stream</code> (Java)</li>
+                    <li class="fragment">
+                        <a href="https://play.rust-lang.org/?gist=f3da9713faca648d25082bc7c24dceee&amp;version=beta&amp;mode=release" rel="noopener noreferrer" target="_blank">Performanța?</a>
+                </ul>
+            </section>
+            <section>
+                <h2>Enumerări</h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    enum Movement {
+                        Walk(f32),
+                        Turn(f32),
+                        Jump
+                    }
+
+                    let movement = get_command();
+                    match movement {
+                        Movement::Walk(distance) =&gt; walk(distance),
+                        Movement::Turn(angle) =&gt; turn(angle),
+                        Movement::Jump =&gt; jump(),
+                    }
+                </code></pre>
+                <ul>
+                    <li class="fragment">Vezi
+                        <em>tagged unions</em>,
+                        <em>variants</em>
+                    </li>
+                    <li class="fragment">
+                        <code>match</code> este verificat de compilator</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Match</h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    let s = match x {
+                        0 =&gt; "zero",
+                        1 =&gt; "one",
+                        2 =&gt; "a couple",
+                        3 | 4 =&gt; "three",
+                        5..10 =&gt; "many",
+                        _ =&gt; "a lot",
+                    };
+                </code></pre>
+            </section>
+            <section>
+                <h2>Structuri</h2>
+                <p>
+                    <a href="https://play.rust-lang.org/?gist=34145e7eeeb890d5af1f556290d28cc2" rel="noopener noreferrer" target="_blank">Play</a>
+                </p>
+                <pre><code class="hljs lang-rust" data-trim>
+                    #[derive(Debug)]
+                    struct Point {
+                        x: f32,
+                        y: f32,
+                    }
+
+                    impl Point {
+                        fn new(x: f32, y: f32) -&gt; Self {
+                            Point { x: x, y: y }
+                        }
+                    }
+
+                    let p = Point::new(2.0, 8.0);
+                    println!("{:?}", p);
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    Option, if let
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    enum Option&lt;T&gt; {
+                        None,
+                        Some(T),
+                    }
+
+                    let mut x = None;
+                    x = Some(10);
+
+                    if let Some(v) = x {
+                    }
+                </code></pre>
+                <p class="fragment">Valori opționale <em>vs. null pointers</em></p>
+            </section>
+            <section>
+                <blockquote cite="https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare">
+                    &ldquo;I call it my billion-dollar mistake. [...] This has led to innumerable errors, vulnerabilities, and system crashes,
+                    which have probably caused a billion dollars of pain and damage in the last forty years.&rdquo;&#8202;&mdash;&#8202;C.&#8202;A.&#8202;R.
+                    Hoare
+                </blockquote>
+            </section>
+            <section>
+                <h2>
+                    <em>Destructuring bind</em>, tupluri
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    let p = Some(Point::new(2.0, 8.0));
+
+                    if let Some(Point { x, y }) = p {
+                    }
+
+                    match p {
+                        Some(Point { x, y }) =&gt; {},
+                        None =&gt; {},
+                    }
+
+                    let t = (10, "a");
+                    let (n, s) = t;
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    <em>Generics</em>
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    enum Option&lt;T&gt; {
+                        None,
+                        Some(T),
+                    }
+                </code></pre>
+                <ul>
+                    <li class="fragment">Asemănătoare tipurilor generice din C#</li>
+                    <li class="fragment">Modelul din C++ (monomorfizare)</li>
+                    <li class="fragment">Parametrii generici nu pot fi valori, ci doar tipuri</li>
+                </ul>
+            </section>
+            <section>
+                <h2>
+                    Testare
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                pub fn add_two(a: i32) -&gt; i32 {
+                    a + 2
+                }
+
+                #[bench]
+                fn bench_add_two(b: &amp;mut Bencher) {
+                    b.iter(|| add_two(2));
+                }
+                </code></pre>
+                <pre class="fragment"><code class="hljs lang-shell" data-trim>
+                    $ cargo bench
+                    Compiling hello v0.1.0 (file:///home/grayshade/hello)
+                        Finished release [optimized] target(s) in 0.74 secs
+                        Running target/release/deps/hello-b644eaf5a2174734
+
+                    running 1 test
+                    test bench_add_two ... bench:           1 ns/iter (+/- 0)
+
+                    test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured; 0 filtered out
+                </code></pre>
+            </section>
+            <section>&nbsp;</section>
+            <section>
+                <h2>
+                    <em>Traits</em>
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    trait Hello {
+                        fn greet(&amp;self);
+                    }
+
+                    struct Cat;
+
+                    impl Hello for Cat {
+                        fn greet(&amp;self) {
+                            println!("Meow meow meow meow meow");
+                        }
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    <em>Traits</em>
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    struct Dog;
+
+                    impl Hello for Dog {
+                        fn greet(&amp;self) {
+                            println!("Woof");
+                        }
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    <em>Traits</em>
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    fn meet&lt;T: Hello&gt;(whom: &amp;T) {
+                        whom.greet();
+                    }
+
+                    fn main() {
+                        let cat = Cat;
+                        let dog = Dog;
+
+                        meet(&amp;cat);
+                        meet(&amp;dog);
+                    }
+                </code></pre>
+                <p>
+                    <a href="https://play.rust-lang.org/?gist=463d2b25637d65540cfd0f543aead3f2" rel="noopener noreferrer" target="_blank">Play</a>
+                </p>
+            </section>
+            <section>
+                <ul>
+                    <li>
+                        OOP înseamnă altceva în fiecare limbaj</li>
+                    <li class="fragment">Pentru mulți, OOP înseamnă clase derivate &mdash; cu cât mai multe, cu atât mai bine (Java)</li>
+                    <li class="fragment">C++: moștenire multiplă<span class="fragment"> și virtuală</span><span class="fragment">,
+                        ajustări de <em>pointer</em>-i</span><span class="fragment">,
+                        <code>dynamic_cast</code></span><span class="fragment">, RTTI</span><span class="fragment">, destructori
+                        virtuali</span><span class="fragment">, ierarhii adânci de clase</span>
+                    </li>
+                    <li class="fragment">Constructori de copiere <em>vs.</em> <code>clone()</code></li>
+                    <li class="fragment"><em>Composition over inheritance</em></li>
+                    <li class="fragment">Rust nu are moștenire (!)</li>
+                </ul>
+            </section>
+            <section>
+                <h2>
+                    <em>Traits</em>
+                </h2>
+                <ul>
+                    <li>Un
+                        <em>trait</em> este un contract pe care tipurile îl respectă</li>
+                    <li class="fragment">Similare cu interfețele, dar Rust monomorfizează tipurile generice</li>
+                    <li class="fragment">Pot fi implementate în afara claselor</li>
+                    <li class="fragment">Fără cost de performanță la <em>dispatch</em> static; <em>inlining</em>
+                    </li>
+                    <li class="fragment">
+                        <em>Dispatch</em> dinamic mai rapid &mdash; <em>fat pointers</em>
+                    </li>
+                    <li class="fragment">
+                        Vezi <em>C++ contracts</em>, <em>extension methods</em>, <em>type classes</em>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>
+                    <em>Error handling</em>
+                </h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    enum Result&lt;T, E&gt; {
+                        Ok(T),
+                        Err(E),
+                    }
+                </code></pre>
+                <pre class="fragment"><code class="hljs lang-rust" data-trim>
+                    fn read_file(file: &amp;Path) -&gt; Result&lt;String, io::Error&gt; {
+                        let mut f = File::open(file)?;
+
+                        let mut buffer = String::new();
+                        f.read_to_string(&amp;mut buffer)?;
+
+                        Ok(buffer)
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <h2><em>Error handling</em></h2>
+                <ul>
+                    <li>Excepțiile din C++ complică limbajul și nu pot fi evitate</li>
+                    <li class="fragment"><em>Exception safety guarantees</em></li>
+                    <li class="fragment">Constructori de copiere și mutare, destructori</li>
+                    <li class="fragment">Prea multe moduri de raportare a erorilor (<code>errno</code>, return values, <code>std::error_code</code>, excepții, <code>setjmp</code>)</li>
+                </ul>
+            </section>
+            <section>
+                <pre><code class="hljs lang-cpp" data-trim>
+                    foo(unique_ptr&lt;C&gt;(new C),
+                        unique_ptr&lt;C&gt;(new C));
+                </code></pre>
+                <p class="fragment"><em>Spot the bug</em></p>
+            </section>
+            <section>
+                <h2><em>Ownership</em></h2>
+                <ul>
+                    <li>Valorile din Rust sunt mutate (consumate, transferate) la folosire</li>
+                    <li class="fragment">Sunt distruse la sfârșitul blocului de care aparțin (C++ RAII)</li>
+                    <li class="fragment">C++ <em>move semantics</em>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <pre><code class="hljs lang-rust" data-trim>
+                    fn consume(_: String) {}
+
+                    let s = String::from("hello");
+
+                    consume(s);
+                    consume(s);
+                </code></pre>
+                <p>
+                    <a href="https://play.rust-lang.org/?gist=1ad3fe8cca5c41611c288947b23b7459" rel="noopener noreferrer" target="_blank">Play</a>
+                </p>
+            </section>
+            <section>
+                <h2>
+                    <em>Quiz</em>
+                </h2>
+                <p>Va fi <code>f</code> optimizată la <code>g</code>?</p>
+                <pre><code class="hljs lang-c" data-trim>
+                    void f(int *p, int *q) {
+                        *p += *q;
+                        *p += *q;
+                    }
+
+                    void g(int *p, int *q) {
+                        *p += *q + *q;
+                    }
+                </code></pre>
+                <p class="fragment">
+                    <a href="https://godbolt.org/g/vPgtqU" rel="noopener noreferrer" target="_blank">...</a>
+                </p>
+                <pre class="fragment"><code class="hljs lang-c" data-trim>
+                    int x = 10, *p = &amp;x, *q = &amp;x;
+                    f(p, q);
+
+                    x = 10;
+                    g(p, q);
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    <em>Aliasing</em>
+                </h2>
+                <ul>
+                    <li>Compilatorul nu știe că
+                        <code>p</code> și
+                        <code>q</code> indică spre valori diferite</li>
+                    <li class="fragment">Programatorul nu știe că
+                        <code>p</code> și
+                        <code>q</code> indică spre valori diferite</li>
+                    <li class="fragment">Fortran încă e folosit în 2017</li>
+                    <li class="fragment">Vezi <code>restrict</code> în C (dar nu C++)</li>
+                    <li class="fragment">🎗️Părțile programelor trebuie să aibă grijă să nu modifice aceleași valori🎗️</li>
+                </ul>
+            </section>
+            <section>
+                <p>În Rust valorile au:</p>
+                <ol>
+                    <li class="fragment">un <em>owner</em>, dar pot fi împrumutate ca referințe</li>
+                    <li class="fragment">oricâte referințe imutabile, <em>sau</em></li>
+                    <li class="fragment">o singură referință mutabilă</li>
+                </ol>
+                <p class="fragment">🎗️<em>aliasing XOR mutability</em>🎗️</p>
+            </section>
+            <section>
+                <pre><code class="hljs lang-rust" data-trim>
+                    fn borrow(_s: &amp;String) {}
+                    fn mutate(_s: &amp;mut String) {}
+
+                    fn main() {
+                        let mut s = String::from("hello ");
+
+                        borrow(&amp;s);
+                        mutate(&amp;mut s);
+
+                        println!("{}", s);
+                    }
+                </code></pre>
+                <p>
+                    <a href="https://play.rust-lang.org/?gist=dec215ad46a19eb7c5fcf032b5c44ebf" rel="noopener noreferrer" target="_blank">Play</a>
+                </p>
+            </section>
+            <section>
+                <h2>
+                    <em>Threading</em>
+                </h2>
+                <ul>
+                    <li>Cei care au folosit <em>thread</em>-uri recunosc restricțiile</li>
+                    <li class="fragment"><em>race conditions</em></li>
+                    <li class="fragment"><em>readers-writer locks</em></li>
+                    <li class="fragment">Firește, Rust oferă primitivele comune de sincronizare:
+                        <span class="fragment"><em>mutex</em>-uri</span><span class="fragment">, <em>RW locks</em></span><span class="fragment">, <em>condition variables</em></span><span class="fragment">, bariere</span><span class="fragment">, operații atomice</span><span class="fragment">, <code>Once</code></span><span class="fragment">, <em>shared pointers</em></span><span class="fragment">, canale</span>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>Canale</h2>
+                <pre><code class="hljs lang-rust" data-trim>
+                    let (tx, rx) = mpsc::channel();
+
+                    thread::spawn(move || for i in 0..10 {
+                        tx.send(i).unwrap();
+                    });
+
+                    for x in rx.iter() {
+                        println!("{}", x);
+                    }
+                </code></pre>
+                <p>
+                    <a href="https://play.rust-lang.org/?gist=59dc922d2345c31d3a3e0ba2e2afda52" rel="noopener noreferrer" target="_blank">Play</a>
+                </p>
+            </section>
+            <section>
+                <blockquote cite="http://c-faq.com/ansi/undef.html">&ldquo;Anything at all can happen; the Standard imposes no requirements. The program may fail to compile, or it
+                    may execute incorrectly (either crashing or silently generating incorrect results), or it may fortuitously
+                    do exactly what the programmer intended.&rdquo;
+                </blockquote>
+                <p class="fragment"><a href="http://port70.net/~nsz/c/c11/n1570.pdf" rel="noopener noreferrer" target="_blank">ISO/IEC 9899:2011 &sect;J.2</a></p>
+                <p class="fragment emoji">😱</p>
+            </section>
+            <section>
+                <ul>
+                    <li>Rust evită UB, prin specificarea lui și verificări la compilare și execuție</li>
+                    <li class="fragment">🎗️Multe greșeli sunt erori de compilare în Rust:
+                        <span class="fragment"><em>double frees</em></span><span class="fragment">,
+                            <em>use-after-free</em></span><span class="fragment">,
+                            <em>buffer overflows</em></span><span class="fragment">,
+                            <em>race conditions</em>🎗️
+                        </span>
+                    </li>
+                    <li class="fragment">Rust e o alegere bună pentru <em>parser</em>-e, <em>codec</em>-uri sau servicii de rețea</li>
+                </ul>
+            </section>
+            <section>&nbsp;</section>
+            <section>
+                <ul>
+                    <li><em>We need to talk&hellip;</em></li>
+                    <li class="fragment"><a href="http://heartbleed.com/" rel="noopener noreferrer" target="_blank">Heartbleed</a></li>
+                    <li class="fragment"><a href="https://courses.cs.washington.edu/courses/cse484/14au/reading/25-years-vulnerabilities.pdf" rel="noopener noreferrer" target="_blank">25 Years of Vulnerabilities <em>pp.</em> 7&ndash;9</a></li>
+                    <li class="fragment"><a href="https://nvd.nist.gov/vuln/visualizations/cwe-over-time" rel="noopener noreferrer" target="_blank">CWE Over Time</a></li>
+                    <li class="fragment"><a href="https://github.com/RMerl/asuswrt-merlin/blob/c818a3b3d86b09df95750601bcb0202b486dee9d/release/src/router/networkmap/ASUS_Discovery.c#L177" rel="noopener noreferrer" target="_blank">Coming soon to a device near you&hellip;</a></li>
+                    <li class="fragment"><a href="https://www.debian.org/security/2017/dsa-4019" rel="noopener noreferrer" target="_blank"><em>Magick</em></a></li>
+                </ul>
+            </section>
+            <section>
+                <ul>
+                    <li><em>Session types</em> &mdash; automate finite codificate în sistemul de tipuri</li>
+                    <li class="fragment"><em>Proofs</em>: <code>MutexGuard</code> <em>vs.</em> Java <code>synchronized</code></li>
+                    <li class="fragment"><code>String</code>, <code>OsString</code>, <code>CString</code></li>
+                    <li class="fragment">Analiză dimensională</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Macrouri</h2>
+                <ul>
+                    <li>Modalități de extindere a sintaxei: macrouri declarative și procedurale, <em>custom derive</em>, <em>compiler plugins</em></li>
+                    <li class="fragment"><em>Build scripts</em> &mdash; pentru generare de fișiere sursă la compilare</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Interoperabilitate</h2>
+                <ul>
+                    <li>Pot fi apelate funcții scrise în C</li>
+                    <li class="fragment">Pot fi exportate funcții pentru alte limbaje</li>
+                    <li class="fragment"><a href="https://rust-lang-nursery.github.io/rust-bindgen/" rel="noopener noreferrer" target="_blank"><code>bindgen</code></a></li>
+                    <li class="fragment"><a href="https://github.com/KDE/rust-qt-binding-generator" rel="noopener noreferrer" target="_blank"><em>Rust QT Binding Generator</em></a></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Performanță</h2>
+                <ul>
+                    <li>Performanță comparabilă cu C, fără <em>garbage collector</em> sau <em>run-time</em></li>
+                    <li class="fragment"><a href="http://blog.burntsushi.net/ripgrep/" rel="noopener noreferrer" target="_blank"><code>ripgrep</code></a></li>
+                    <li class="fragment"><a href="https://github.com/serde-rs/json" rel="noopener noreferrer" target="_blank"><code>serde_json</code></a></li>
+                    <li class="fragment"><a href="https://docs.rs/csv/1.0.0-beta.5/csv/tutorial" rel="noopener noreferrer" target="_blank"><code>csv</code></a></li>
+                    <li class="fragment"><a href="https://hacks.mozilla.org/2017/10/the-whole-web-at-maximum-fps-how-webrender-gets-rid-of-jank/" rel="noopener noreferrer" target="_blank"><code>webrender</code></a></li>
+                    <li class="fragment"><a href="http://pcwalton.github.io/blog/2017/02/14/pathfinder/" rel="noopener noreferrer" target="_blank"><code>pathfinder</code></a></li>
+                    <li class="fragment"><a href="https://github.com/tantivy-search/tantivy" rel="noopener noreferrer" target="_blank"><code>tantivy</code></a></li>
+                    <li class="fragment"><a href="http://blog.japaric.io/fearless-concurrency/" rel="noopener noreferrer" target="_blank"><code>rtfm</code></a></li>
+                </ul>
+            </section>
+            <section>
+                <p><a href="http://intorust.com/tutorial/why-rust/" rel="noopener noreferrer" target="_blank">via</a></p>
+                <pre><code class="hljs lang-ruby" data-trim>
+                    class ::String
+                      def blank?
+                        /\A[[:space:]]*\z/ == self
+                      end
+                    end
+                </code></pre>
+                <p class="fragment"><a href="https://github.com/SamSaffron/fast_blank/blob/master/ext/fast_blank/fast_blank.c" rel="noopener noreferrer" target="_blank">C</a></p>
+                <pre class="fragment"><code class="hljs lang-rust" data-trim>
+                    extern fast_blank(buf: &amp;Buf) -&gt; bool {
+                        buf.as_slice().chars().all(|c| c.is_whitespace())
+                    }
+                </code></pre>
+            </section>
+            <section>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Ruby</td>
+                            <td class="right">946K iter/s</td>
+                        </tr>
+                        <tr class="fragment">
+                            <td>C</td>
+                            <td class="right">10.5M iter/s</td>
+                        </tr>
+                        <tr class="fragment">
+                            <td>Rust</td>
+                            <td class="right">11M iter/s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section>&nbsp;</section>
+            <section>
+                <p><a href="https://www.rust-lang.org/en-US/friends.html" rel="noopener noreferrer" target="_blank">www.rust-lang.org/en-US/friends.html</a></p>
+                <p class="fragment"><a href="https://insights.stackoverflow.com/survey/2017" rel="noopener noreferrer" target="_blank">&ldquo;Most loved language&rdquo; second year in a row</a></p>
+            </section>
+            <section>
+                <h2>Documentație</h2>
+                <p><a href="https://doc.rust-lang.org/std/string/struct.String.html" rel="noopener noreferrer" target="_blank">doc.rust-lang.org/std/string/struct.String.html</a></p>
+            </section>
+            <section>
+                <h2>Comunitate</h2>
+                <ul>
+                    <li>Diverse locații pentru suport (IRC, Gitter, Discourse)</li>
+                    <li class="fragment">Comunitate foarte prietenoasă</li>
+                    <li class="fragment">Proiecte open-source</li>
+                </ul>
+            </section>
+            <section>
+                <h1 class="emoji">❤️</h1>
+            </section>
+        </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+        Reveal.initialize({
+            history: true,
+            transition: 'none',
+            dependencies: [
+                { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+            ]
+        });
+    </script>
+</body>
+
+</html>
